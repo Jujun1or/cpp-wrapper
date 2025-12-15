@@ -34,14 +34,14 @@ private:
             std::invoke(
                 methodPtr,
                 target,
-                container_cast<Args>(args[I].value)...
+                container_cast<std::decay_t<Args>>(args[I].value)...
             );
             return Container();
         } else {
             Ret result = std::invoke(
                 methodPtr,
                 target,
-                container_cast<Args>(args[I].value)...
+                container_cast<std::decay_t<Args>>(args[I].value)...
             );
             return Container(result);
         }
