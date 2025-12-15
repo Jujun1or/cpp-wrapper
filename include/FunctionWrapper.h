@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <utility>
 #include <functional>
+#include <type_traits>
 
 #include "ICallable.h"
 
@@ -29,11 +30,20 @@ private:
         const std::vector<FunctionArgument>& args,
         std::index_sequence<I...>
     ) {
-        Ret result = std::invoke(
-            methodPtr,
-            target,
-            container_cast<Args>(args[I].value)...
-        );
-        return Container(result);
+        if constexpr (std::is_void_v<Ret>) {
+            std::invoke(
+                methodPtr,
+                target,
+                container_cast<Args>(args[I].value)...
+            );
+            return Container();
+        } else {
+            Ret result = std::invoke(
+                methodPtr,
+                target,
+                container_cast<Args>(args[I].value)...
+            );
+            return Container(result);
+        }
     }
 };
