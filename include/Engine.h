@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <vector>
 #include <stdexcept>
+#include <mutex>
 
 #include "ICallable.h"
 #include "FunctionArgument.h"
@@ -20,4 +21,5 @@ public:
 
 private:
     std::unordered_map<std::string, ICallable*> commands;
+    std::mutex mutex;
 };
