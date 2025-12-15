@@ -7,6 +7,13 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(main
     src/main.cpp
+    src/Engine.cpp
+    tests/EngineTests.cpp
 )
 
-target_include_directories(main PRIVATE include)
+target_include_directories(main
+    PRIVATE
+        include
+        tests
+)
+

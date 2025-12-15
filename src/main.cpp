@@ -1,7 +1,7 @@
 #include <iostream>
+#include "EngineTests.h"
 
 int main() {
-
-    std::cout << "Hello World" << std::endl;
+    EngineTests::runAll();
     return 0;
 }
