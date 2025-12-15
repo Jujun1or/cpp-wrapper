@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <stdexcept>
+#include <utility>
+#include <functional>
 
 #include "ICallable.h"
 
@@ -14,11 +16,24 @@ public:
         : target(object)
         , methodPtr(method) {}
 
-    Container invoke(const std::vector<FunctionArgument>&) override {
-        throw std::logic_error("FunctionWrapper invoke not implemented yet");
+    Container invoke(const std::vector<FunctionArgument>& args) override {
+        return invokeImpl(args, std::index_sequence_for<Args...>{});
     }
 
 private:
     Obj& target;
     MethodPtr methodPtr;
+
+    template<std::size_t... I>
+    Container invokeImpl(
+        const std::vector<FunctionArgument>& args,
+        std::index_sequence<I...>
+    ) {
+        Ret result = std::invoke(
+            methodPtr,
+            target,
+            container_cast<Args>(args[I].value)...
+        );
+        return Container(result);
+    }
 };
